@@ -3,13 +3,14 @@
 // pattern (two followers, a kick, idle drift, grab/release blends) is
 // reused as-is; the markup and content are this project's own.
 //
-// TILT/FOIL/GLARE PAUSED — felt gimmicky against the clean Figma design, per
-// user feedback. The engine (holoEngine.js) and this wiring are untouched
-// and ready to go; flip ENABLE_HOLO_MOTION back to true to resume that work.
-// Until then the card renders as a plain static match of the Figma file —
-// no card-level foil/glare/pattern, and the avatar shows its real photo
-// with no duotone/gloss overlays, exact original color.
-
+// TILT IS BACK ON, foil shimmer and the avatar duotone-flip stay off — per
+// user decision: the shimmer/pattern/glare layers and the avatar's
+// color-flip felt gimmicky against the clean Figma design, but the 3D tilt
+// itself (the card rotating toward the pointer) is the point of the whole
+// site. The engine (holoEngine.js) still computes everything for all three
+// effects every frame (see applyFrame) — ENABLE_FOIL_SHIMMER and
+// ENABLE_AVATAR_FLIP just gate whether the corresponding DOM layers render,
+// so re-enabling either later is a one-line flip, not a rebuild.
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { FOILS, Follow, Kick, Orientation, applyFoil, applyFrame, fromPointer } from "../motion/holoEngine";
@@ -18,7 +19,9 @@ import { CoffeeCup } from "./CoffeeCup";
 import { Doodle } from "./Doodle";
 import "../motion/holoEngine.css";
 
-const ENABLE_HOLO_MOTION = false;
+const ENABLE_TILT = true;
+const ENABLE_FOIL_SHIMMER = false;
+const ENABLE_AVATAR_FLIP = false;
 
 // Flat white print, matching the Figma card exactly (no gradient).
 const BODY_GRADIENT = "#ffffff";
@@ -50,7 +53,7 @@ export function HoloCard({ card }) {
   const foil = FOILS[0];
 
   useEffect(() => {
-    if (ENABLE_HOLO_MOTION && cardRef.current) {
+    if (ENABLE_FOIL_SHIMMER && cardRef.current) {
       applyFoil(cardRef.current, foil, {
         photoUrl: card.photo,
         bodyGradient: BODY_GRADIENT,
@@ -61,13 +64,17 @@ export function HoloCard({ card }) {
   }, [foil, card.photo]);
 
   useEffect(() => {
-    if (!ENABLE_HOLO_MOTION) return;
+    if (!ENABLE_TILT) return;
     const host = hostRef.current;
     const cardEl = cardRef.current;
     if (!host || !cardEl) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const tilt = new Follow(0.16);
+    // Lower stiffness than the source's 0.16 — with foil/glare off, this
+    // follower is the only thing giving the tilt its weight, so it needed
+    // to carry more of the smoothing on its own to still feel damped
+    // rather than snapping straight to the pointer.
+    const tilt = new Follow(0.1);
     const sheet = new Follow(0.09);
     const kick = new Kick();
     const t0 = performance.now();
@@ -76,7 +83,6 @@ export function HoloCard({ card }) {
     let running = false;
     let onScreen = false;
     let hidden = false;
-    let idle = 0;
     let touched = false;
     let release = 1;
     let handoff = { x: 0, y: 0 };
@@ -88,21 +94,19 @@ export function HoloCard({ card }) {
       raf = 0;
 
       if (!touched) {
-        idle += 0.0042;
-        const drift = {
-          x: Math.sin(idle) * 0.28,
-          y: Math.cos(idle * 0.73) * 0.2,
-        };
+        // Source drifts toward a slow idle wander here instead of flat —
+        // per user decision, this card resets to its original position
+        // when the cursor leaves rather than staying "alive" with motion.
         release = Math.min(1, release + 0.016);
         const k = release * release;
         tilt.target = {
-          x: handoff.x + (drift.x - handoff.x) * k,
-          y: handoff.y + (drift.y - handoff.y) * k,
+          x: handoff.x + (0 - handoff.x) * k,
+          y: handoff.y + (0 - handoff.y) * k,
         };
       }
 
       if (touched) {
-        grab = Math.min(1, grab + 0.018);
+        grab = Math.min(1, grab + 0.014);
         const k = grab * grab;
         tilt.target = {
           x: grabFrom.x + (aim.x - grabFrom.x) * k,
@@ -225,7 +229,7 @@ export function HoloCard({ card }) {
         style={{ perspective: "1100px" }}
       >
         <div ref={cardRef} className="holo-card relative w-full bg-white">
-          {ENABLE_HOLO_MOTION && (
+          {ENABLE_FOIL_SHIMMER && (
             <div className="holo-fx">
               <div className="holo-body" />
               <div className="holo-pattern" />
@@ -252,7 +256,7 @@ export function HoloCard({ card }) {
               >
                 <div className="absolute inset-0 overflow-hidden rounded-full">
                   <img src={card.photo} alt="" className="h-full w-full object-cover" />
-                  {ENABLE_HOLO_MOTION && (
+                  {ENABLE_AVATAR_FLIP && (
                     <div className="holo-tile absolute inset-0">
                       <div className="holo-tile__photo--neg" />
                       <div className="holo-tile__duo" />

@@ -371,7 +371,8 @@ export const FOILS = [
   },
 ];
 
-/** Maximum tilt at the card's edge. */
+/** Maximum tilt at the card's edge. Past ~16deg the perspective distortion
+ *  starts to read as a fold rather than a tilt. */
 export const MAX_TILT = 14;
 
 /** How many foil layers the CSS provides. */
