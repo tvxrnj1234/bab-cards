@@ -251,25 +251,32 @@ export function HoloCard({ card }) {
                 {RoleIcon && (
                   <div
                     className="absolute flex items-center justify-center rounded-full"
-                    style={{ width: 20, height: 20, left: 45, top: 42, backgroundColor: card.badgeColor }}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      left: 45,
+                      top: 42,
+                      backgroundColor: card.badgeColor,
+                      boxShadow: "0 0 0 2px #ffffff",
+                    }}
                   >
                     <RoleIcon className="h-[10px] w-[10px]" />
                   </div>
                 )}
               </div>
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <div className="flex min-w-0 flex-1 flex-col gap-[6px]">
                 <p
                   className="m-0 truncate text-[22px] font-medium leading-[1.1] text-[#2e2e2e]"
-                  style={{ ...geistStyle, letterSpacing: "-0.33px" }}
+                  style={{ ...geistStyle, letterSpacing: "-0.11px" }}
                 >
                   {card.name}
                 </p>
                 <div className="flex items-center gap-2">
-                  <span className="whitespace-nowrap text-[13.5px] text-[#838383]" style={geistStyle}>
+                  <span className="whitespace-nowrap text-[13.5px] font-light text-[#838383]" style={geistStyle}>
                     {card.role}
                   </span>
                   <span className="h-[3px] w-[3px] shrink-0 rounded-full bg-[#838383]" />
-                  <span className="whitespace-nowrap text-[13.5px] text-[#838383]" style={geistStyle}>
+                  <span className="whitespace-nowrap text-[13.5px] font-light text-[#838383]" style={geistStyle}>
                     Class of {card.classYear}
                   </span>
                 </div>
@@ -296,7 +303,7 @@ export function HoloCard({ card }) {
                   <Doodle
                     path={card.doodlePath}
                     viewBox={card.doodleViewBox}
-                    className="absolute left-[2px] top-[2px] h-[30px] w-[33px]"
+                    className="absolute left-[2px] top-[1px] h-[32px] w-[35px]"
                   />
                 </div>
               </div>
