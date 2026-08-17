@@ -31,13 +31,11 @@ export function CoffeeCup({ className }) {
     <svg className={className} viewBox="0 0 20 40" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
       {/* The stream — anchored at the very top of the button's own inner
           edge, grows downward into the cup's opening once the lid clears
-          out of the way. */}
-      <motion.rect
-        x="9.4"
-        y="0"
-        width="1.3"
-        height="17"
-        rx="0.65"
+          out of the way. Tapered (wide at the pour, necking in under
+          "gravity", flaring slightly again where it meets the cup) rather
+          than a uniform bar, so it reads as liquid rather than a rod. */}
+      <motion.path
+        d="M9.2 0H10.8C10.8 3 10.35 5.5 10.35 8C10.35 10.5 10.5 13 10.5 15.5C10.5 16.4 10.3 17 10 17C9.7 17 9.5 16.4 9.5 15.5C9.5 13 9.65 10.5 9.65 8C9.65 5.5 9.2 3 9.2 0Z"
         fill="#2E2E2E"
         style={{ originY: 0 }}
         variants={reduce ? undefined : streamVariants}
