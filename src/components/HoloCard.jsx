@@ -38,6 +38,13 @@ export function HoloCard({ card }) {
   // Bumping this remounts <Doodle>, retriggering its draw-in animation —
   // what the PLAY label does.
   const [doodleReplay, setDoodleReplay] = useState(0);
+  // Cumulative, not a rotateY:0/360 whileHover toggle — a toggle reverts
+  // on hover-out by interpolating 360deg back to 0deg numerically (same
+  // angle, different value), which plays as an uncontrolled reverse spin.
+  // Driving it explicitly instead: +1 turn on mouse-enter, -1 on
+  // mouse-leave, so the flip-in and flip-out are the same motion in
+  // reverse, on purpose, rather than a snap.
+  const [badgeSpins, setBadgeSpins] = useState(0);
 
   // ONE MATERIAL, NOT A CAROUSEL — see engine source notes.
   const foil = FOILS[0];
@@ -237,7 +244,12 @@ export function HoloCard({ card }) {
           <div className="holo-content relative flex w-full flex-col items-start gap-2 px-[22px] py-8">
             {/* Identity Row */}
             <div className="flex w-full items-center gap-5">
-              <div className="relative shrink-0" style={{ width: 62, height: 62 }}>
+              <div
+                className="relative shrink-0"
+                style={{ width: 62, height: 62 }}
+                onMouseEnter={() => setBadgeSpins((n) => n + 1)}
+                onMouseLeave={() => setBadgeSpins((n) => n - 1)}
+              >
                 <div className="absolute inset-0 overflow-hidden rounded-full">
                   <img src={card.photo} alt="" className="h-full w-full object-cover" />
                   {ENABLE_HOLO_MOTION && (
@@ -254,18 +266,32 @@ export function HoloCard({ card }) {
                   )}
                 </div>
                 {RoleIcon && (
+                  // The white ring is a static gap, not part of the coin —
+                  // it lives on this outer, non-animated wrapper so only
+                  // the gold circle underneath flips. Solid white fill
+                  // here too, so the avatar photo never peeks through the
+                  // thinned ellipse mid-spin — without it, this wrapper
+                  // has no backing of its own and the photo shows through.
                   <div
-                    className="absolute flex items-center justify-center rounded-full"
+                    className="absolute rounded-full"
                     style={{
                       width: 20,
                       height: 20,
                       left: 45,
                       top: 42,
-                      backgroundColor: card.badgeColor,
+                      backgroundColor: "#ffffff",
                       boxShadow: "0 0 0 2px #ffffff",
+                      perspective: 200,
                     }}
                   >
-                    <RoleIcon className="h-[10px] w-[10px]" />
+                    <motion.div
+                      className="flex h-full w-full items-center justify-center rounded-full"
+                      style={{ backgroundColor: card.badgeColor }}
+                      animate={{ rotateY: badgeSpins * 360 }}
+                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                    >
+                      <RoleIcon className="h-[10px] w-[10px]" />
+                    </motion.div>
                   </div>
                 )}
               </div>
@@ -331,9 +357,9 @@ export function HoloCard({ card }) {
                 href={card.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="pointer-events-auto flex h-[42px] flex-1 items-center justify-center gap-[9px] rounded-[8px] border border-[#dbdbdb] bg-white"
+                className="group pointer-events-auto flex h-[42px] flex-1 items-center justify-center gap-[9px] rounded-[8px] border border-[#dbdbdb] bg-white"
               >
-                <LinkedInIcon className="h-4 w-4" />
+                <LinkedInIcon className="h-4 w-4 text-[#2e2e2e] transition-colors duration-200 group-hover:text-[#0A66C2]" />
                 <span className="text-[14px] text-[#2e2e2e]" style={geistStyle}>
                   View Profile
                 </span>

@@ -33,10 +33,12 @@ export function CoffeeCup({ className }) {
           edge, grows downward into the cup's opening once the lid clears
           out of the way. Tapered (wide at the pour, necking in under
           "gravity", flaring slightly again where it meets the cup) rather
-          than a uniform bar, so it reads as liquid rather than a rod. */}
+          than a uniform bar, so it reads as liquid rather than a rod.
+          Colored like actual coffee — the only part of the icon that
+          isn't the flat #2E2E2E used everywhere else. */}
       <motion.path
-        d="M9.2 0H10.8C10.8 3 10.35 5.5 10.35 8C10.35 10.5 10.5 13 10.5 15.5C10.5 16.4 10.3 17 10 17C9.7 17 9.5 16.4 9.5 15.5C9.5 13 9.65 10.5 9.65 8C9.65 5.5 9.2 3 9.2 0Z"
-        fill="#2E2E2E"
+        d="M9.05 0H10.95C10.95 3 10.5 5.5 10.5 8C10.5 10.5 10.65 13 10.65 15.5C10.65 16.4 10.3 17 10 17C9.7 17 9.35 16.4 9.35 15.5C9.35 13 9.5 10.5 9.5 8C9.5 5.5 9.05 3 9.05 0Z"
+        fill="#6F4E37"
         style={{ originY: 0 }}
         variants={reduce ? undefined : streamVariants}
       />
