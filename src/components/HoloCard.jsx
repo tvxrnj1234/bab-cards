@@ -229,7 +229,7 @@ export function HoloCard({ card }) {
             </div>
           )}
 
-          <div className="holo-content relative flex w-full flex-col items-start gap-[4px] px-[22px] py-8">
+          <div className="holo-content relative flex w-full flex-col items-start gap-2 px-[22px] py-8">
             {/* Identity Row */}
             <div className="flex w-full items-center gap-5">
               <div className="relative shrink-0" style={{ width: 62, height: 62 }}>
