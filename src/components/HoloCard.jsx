@@ -10,9 +10,9 @@
 // no card-level foil/glare/pattern, and the avatar shows its real photo
 // with no duotone/gloss overlays, exact original color.
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FOILS, Follow, Kick, Orientation, applyFoil, applyFrame, fromPointer } from "../motion/holoEngine";
-import { ArtIcon, CoffeeIcon, LinkedInIcon } from "./icons";
+import { ArtIcon, CoffeeIcon, LinkedInIcon, ReloadIcon } from "./icons";
 import { Doodle } from "./Doodle";
 import "../motion/holoEngine.css";
 
@@ -33,6 +33,9 @@ const monoStyle = { fontFamily: "'JetBrains Mono', monospace" };
 export function HoloCard({ card }) {
   const hostRef = useRef(null);
   const cardRef = useRef(null);
+  // Bumping this remounts <Doodle>, retriggering its draw-in animation —
+  // what the PLAY label does.
+  const [doodleReplay, setDoodleReplay] = useState(0);
 
   // ONE MATERIAL, NOT A CAROUSEL — see engine source notes.
   const foil = FOILS[0];
@@ -301,10 +304,21 @@ export function HoloCard({ card }) {
                 </p>
                 <div className="relative h-[34px] w-full">
                   <Doodle
+                    key={doodleReplay}
                     path={card.doodlePath}
                     viewBox={card.doodleViewBox}
                     className="absolute left-[2px] top-[1px] h-[32px] w-[35px]"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setDoodleReplay((n) => n + 1)}
+                    className="pointer-events-auto absolute bottom-0 right-0 flex cursor-pointer items-center gap-1 bg-transparent p-0 text-[10px] text-[#bcbcbc]"
+                    style={{ ...monoStyle, letterSpacing: "1px" }}
+                    aria-label="Replay doodle animation"
+                  >
+                    <ReloadIcon className="h-[9px] w-[9px]" />
+                    PLAY
+                  </button>
                 </div>
               </div>
             </div>
