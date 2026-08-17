@@ -33,19 +33,6 @@ export function LinkedInIcon({ className }) {
   );
 }
 
-export function CoffeeIcon({ className }) {
-  return (
-    <svg className={className} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(4.218, 1.81)">
-        <path
-          d="M0.684375 4.43L1.95625 15.2756C1.95625 15.8862 3.66875 16.3819 5.78125 16.3819C7.89375 16.3819 9.60625 15.8862 9.60625 15.2756L11.0938 4.34688C9.55938 4.98688 6.83625 5.05563 5.7825 5.05563C4.77625 5.05563 2.24813 4.99313 0.685625 4.43063L0.684375 4.43ZM10.8625 1.78625L10.6275 0.73625C10.6275 0.33 8.4575 0 5.78125 0C3.105 0 0.935 0.33125 0.935 0.7375L0.7 1.78562C0.25375 1.96312 0 2.16562 0 2.38125V3.18437C0 3.87187 2.58875 4.43063 5.78125 4.43063C8.97375 4.43063 11.5625 3.87187 11.5625 3.18375V2.38063C11.5625 2.165 11.3087 1.96187 10.8625 1.785V1.78625Z"
-          fill="#2E2E2E"
-        />
-      </g>
-    </svg>
-  );
-}
-
 /** mdi:art — the palette glyph inside the role badge. */
 export function ArtIcon({ className }) {
   return (

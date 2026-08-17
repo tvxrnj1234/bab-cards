@@ -11,8 +11,10 @@
 // with no duotone/gloss overlays, exact original color.
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import { FOILS, Follow, Kick, Orientation, applyFoil, applyFrame, fromPointer } from "../motion/holoEngine";
-import { ArtIcon, CoffeeIcon, LinkedInIcon, ReloadIcon } from "./icons";
+import { ArtIcon, LinkedInIcon, ReloadIcon } from "./icons";
+import { CoffeeCup } from "./CoffeeCup";
 import { Doodle } from "./Doodle";
 import "../motion/holoEngine.css";
 
@@ -336,17 +338,19 @@ export function HoloCard({ card }) {
                   View Profile
                 </span>
               </a>
-              <a
+              <motion.a
                 href={card.coffeeChat}
                 target="_blank"
                 rel="noreferrer"
                 className="pointer-events-auto flex h-[42px] flex-1 items-center justify-center gap-[9px] rounded-[8px] border border-[#dbdbdb] bg-white"
+                initial="rest"
+                whileHover="hover"
               >
-                <CoffeeIcon className="h-5 w-5" />
+                <CoffeeCup className="h-full w-5 shrink-0" />
                 <span className="text-[14px] text-[#2e2e2e]" style={geistStyle}>
                   Coffee Chat
                 </span>
-              </a>
+              </motion.a>
             </div>
           </div>
         </div>
