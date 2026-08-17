@@ -1,0 +1,280 @@
+/* Holo card stylesheet — adapted from the compiled CSS behind
+ * arlan.me/vault/holo (see /reference/holo-vault/holo.css for the original).
+ *
+ * Each rule here reads a CSS custom property that holoEngine.js's
+ * applyFrame/applyFoil write every frame (or once per material). This file
+ * never knows which material is mounted or whose photo is showing — it only
+ * knows how to paint the variables.
+ *
+ * Content layout (identity row, metadata grid, actions) matches the Figma
+ * design exactly and is built with Tailwind utility classes directly in
+ * HoloCard.jsx. Unlike Arlan's source — where every card child is absolutely
+ * stacked inside a fixed-aspect-ratio box — this card's height is content-
+ * driven (Figma's "Card" frame hugs its children), so the material layers
+ * (.holo-fx) are the ones absolutely filled; .holo-content stays in normal
+ * flow so its padding and rows set the card's actual height.
+ *
+ * The avatar (.holo-tile) keeps Arlan's duotone photo-flip trick, adapted
+ * from his rounded-square tile to a circle — the flip mask is shape-agnostic,
+ * it just sweeps across whatever it's clipped to.
+ */
+
+.holo-card {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 60px 0 rgba(0, 0, 0, 0.2);
+  container-type: inline-size;
+}
+
+.holo-fx {
+  border-radius: inherit;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.holo-fx > * {
+  border-radius: inherit;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.holo-body {
+  background: var(--body-grad);
+}
+
+/* The decoration, bought out of the tilt budget — barely there at rest,
+ * coming up as the card turns. Reusing Arlan's reveal pattern for now;
+ * swap the SVG motif for a club mark once the full design pass happens. */
+.holo-pattern,
+.holo-pattern--lit {
+  opacity: var(--reveal, 0);
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%20%3Cpath%20d%3D%27M14%2026c-6-7.5-1-15.5%204.8-14.2%202.8.6%204.4%203%205.1%204.6%201-1.7%202.9-4%206-3.8%206.3.4%208.8%209%201.4%2015-3.3%202.7-6.4%204.6-8%206-1.7-1.5-5.5-4.6-9.3-7.6z%27%20transform%3D%27rotate%28-10%2025%2022%29%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-repeat: repeat;
+  background-size: 21%;
+}
+
+.holo-pattern {
+  mix-blend-mode: multiply;
+  mask-image:
+    radial-gradient(ellipse 82% 96% at var(--reveal-x, 50%) var(--reveal-y, 50%), #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 76%),
+    linear-gradient(var(--reveal-angle, 90deg), #000 12%, rgba(0, 0, 0, 0.5) 46%, transparent 62%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+.holo-pattern--lit {
+  mix-blend-mode: screen;
+  opacity: calc(var(--reveal, 0) * 0.85);
+  mask-image:
+    radial-gradient(ellipse 82% 96% at var(--reveal-x, 50%) var(--reveal-y, 50%), #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 76%),
+    linear-gradient(var(--reveal-angle, 90deg), transparent 38%, rgba(0, 0, 0, 0.5) 54%, #000 88%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+.holo-foil,
+.holo-foil--b,
+.holo-foil--c {
+  background-repeat: repeat;
+}
+
+.holo-foil {
+  background-image: var(--l1-img, none);
+  background-size: var(--l1-size, 400% 400%);
+  background-position: var(--l1-x, 50%) var(--l1-y, 50%);
+  background-blend-mode: var(--l1-bgblend, normal);
+  mix-blend-mode: var(--l1-blend, overlay);
+  filter: var(--l1-filter, none);
+  opacity: var(--l1-o, 0);
+}
+
+.holo-foil--b {
+  background-image: var(--l2-img, none);
+  background-size: var(--l2-size, 300% 300%);
+  background-position: var(--l2-x, 50%) var(--l2-y, 50%);
+  background-blend-mode: var(--l2-bgblend, normal);
+  mix-blend-mode: var(--l2-blend, overlay);
+  filter: var(--l2-filter, none);
+  opacity: var(--l2-o, 0);
+}
+
+.holo-foil--c {
+  background-image: var(--l3-img, none);
+  background-size: var(--l3-size, 200% 200%);
+  background-position: var(--l3-x, 50%) var(--l3-y, 50%);
+  background-blend-mode: var(--l3-bgblend, normal);
+  mix-blend-mode: var(--l3-blend, overlay);
+  filter: var(--l3-filter, none);
+  opacity: var(--l3-o, 0);
+}
+
+[data-holo-lite] .holo-foil--c {
+  opacity: calc(var(--l3-o, 0) * 0.5);
+}
+
+.holo-glare {
+  background-image: radial-gradient(
+    farthest-corner circle at var(--gx, 50%) var(--gy, 50%),
+    rgba(255, 255, 255, 0.75) 10%,
+    rgba(255, 255, 255, 0.55) 20%,
+    rgba(0, 0, 0, 0.5) 120%
+  );
+  mix-blend-mode: overlay;
+  opacity: calc(var(--glare-o, 0.55) * (0.93 + var(--breath, 0.5) * 0.07));
+}
+
+.holo-sheen {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, calc(var(--edge-t, 0) * 0.55 + 0.1)),
+    inset 0 -1px 0 rgba(255, 255, 255, calc(var(--edge-b, 0) * 0.5 + 0.06)),
+    inset 1px 0 0 rgba(255, 255, 255, calc(var(--edge-l, 0) * 0.5 + 0.06)),
+    inset -1px 0 0 rgba(255, 255, 255, calc(var(--edge-r, 0) * 0.5 + 0.06)),
+    inset 0 -2px 4px rgba(90, 20, 55, calc(var(--edge-t, 0) * 0.09)),
+    inset 0 2px 4px rgba(90, 20, 55, calc(var(--edge-b, 0) * 0.09)),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.holo-spot {
+  background: radial-gradient(
+    ellipse 130% 110% at var(--gx, 50%) var(--gy, 50%),
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 244, 252, 0.14) 38%,
+    transparent 74%
+  );
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--spot, 0) * 0.55);
+}
+
+.holo-smear {
+  background: linear-gradient(var(--smear-angle, 0deg), transparent 26%, rgba(255, 255, 255, 0.3) 50%, transparent 74%);
+  background-size: 260% 260%;
+  background-position: var(--gx, 50%) var(--gy, 50%);
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--smear, 0) * 0.3);
+}
+
+.holo-noise {
+  mix-blend-mode: overlay;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23p)' opacity='.5'/%3E%3C/svg%3E");
+  background-size: 26%;
+}
+
+/* Content layout (identity row, metadata grid, actions) is built with
+ * Tailwind utility classes directly in HoloCard.jsx, matching the Figma
+ * design 1:1 — see get_design_context output. .holo-content here only
+ * establishes the stacking context above the foil/glare layers below it. */
+.holo-content {
+  z-index: 2;
+  isolation: isolate;
+}
+
+/* THE AVATAR. Circular, adapted from Arlan's duotone photo-flip tile.
+ * Positioned/sized by HoloCard.jsx's own `absolute inset-0` (Tailwind) on
+ * this element, inside a 62px-square relative wrapper — this class only
+ * owns the flip mechanics and paint, not position, to avoid the two
+ * fighting over the `position` property. */
+.holo-tile {
+  background: var(--tile-dark, #5c4813);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  transform: translate(calc(var(--emboss-x, 0) * -1.1), calc(var(--emboss-y, 0) * -1.1));
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.holo-tile > * {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.holo-tile__photo,
+.holo-tile__photo--neg {
+  background-image: var(--tile-src);
+  background-repeat: no-repeat;
+  background-size: 132%;
+  background-position: var(--tile-x, 50%) 32%;
+}
+
+.holo-tile__photo {
+  /* Full color at rest, matching the Figma design exactly — Arlan's source
+   * keeps this permanently grayscale so the inverted layer reads as a color
+   * "flip"; here the photo stays true to life and the invert layer sweeping
+   * in on tilt is an accent rather than the resting state. */
+  filter: contrast(1.05) brightness(1.02);
+}
+
+.holo-tile__photo--neg {
+  filter: grayscale(1) contrast(1.42) brightness(0.92) invert(1) sepia(0.55) hue-rotate(var(--tile-hue, 190deg)) saturate(2.1);
+  mask-image: linear-gradient(
+    var(--tile-sweep-angle, 90deg),
+    #000 calc(var(--tile-invert, 0) * 210% - 78%),
+    rgba(0, 0, 0, 0.98) calc(var(--tile-invert, 0) * 210% - 64%),
+    rgba(0, 0, 0, 0.91) calc(var(--tile-invert, 0) * 210% - 50%),
+    rgba(0, 0, 0, 0.75) calc(var(--tile-invert, 0) * 210% - 36%),
+    rgba(0, 0, 0, 0.5) calc(var(--tile-invert, 0) * 210% - 22%),
+    rgba(0, 0, 0, 0.25) calc(var(--tile-invert, 0) * 210% - 8%),
+    rgba(0, 0, 0, 0.09) calc(var(--tile-invert, 0) * 210% + 6%),
+    rgba(0, 0, 0, 0.02) calc(var(--tile-invert, 0) * 210% + 20%),
+    transparent calc(var(--tile-invert, 0) * 210% + 34%)
+  );
+  opacity: 0.94;
+}
+
+.holo-tile__duo {
+  background-image: linear-gradient(160deg, var(--tile-dark, #5c4813), var(--tile-light, #f6ecd2));
+  mix-blend-mode: color;
+}
+
+.holo-tile__tone {
+  background-image: linear-gradient(160deg, var(--tile-dark, #5c4813), var(--tile-light, #f6ecd2));
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+}
+
+.holo-tile__foil {
+  background-image: repeating-linear-gradient(98deg, #ff8985 0%, #ffee70 3%, #b0ff70 6%, #8ffff8 9%, #8aa1ff 12%, #dc85ff 15%, #ff8985 18%);
+  background-size: 300% 300%;
+  background-position: var(--tile-x, 50%) calc(var(--tile-invert, 0) * 100%);
+  mix-blend-mode: color-dodge;
+  filter: contrast(1.7) saturate(0.85);
+  opacity: calc(var(--tile-invert, 0) * 0.5);
+}
+
+.holo-tile__grain {
+  mix-blend-mode: overlay;
+  opacity: 0.34;
+  background-image:
+    repeating-linear-gradient(63deg, rgba(255, 255, 255, 0.16) 0, transparent 1px, rgba(0, 0, 0, 0.13) 2px, transparent 3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='90' height='90' filter='url(%23g)' opacity='.55'/%3E%3C/svg%3E");
+  background-size: auto, 42%;
+}
+
+.holo-tile__wear {
+  mix-blend-mode: soft-light;
+  opacity: calc(0.28 + var(--tile-invert, 0) * 0.4);
+  background-image: repeating-linear-gradient(28deg, transparent 0 9px, rgba(255, 255, 255, 0.09) 9px 10px, transparent 10px 23px, rgba(255, 255, 255, 0.05) 23px 24px, transparent 24px 51px);
+}
+
+.holo-tile__vignette {
+  background: radial-gradient(78% 74% at 50% 42%, transparent 40%, rgba(80, 30, 60, 0.16) 78%, rgba(80, 30, 60, 0.34) 100%);
+}
+
+.holo-tile__gloss {
+  background-image: radial-gradient(farthest-corner circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(60, 20, 45, 0.16) 110%);
+  mix-blend-mode: soft-light;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-card {
+    transform: none;
+  }
+}
