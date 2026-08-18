@@ -479,10 +479,12 @@ export function HoloCard({ card }) {
                   both the six stroked flap outlines and the three "Subtract"
                   fill shapes (the hollow-looking triangle/arrow bodies,
                   built via a boolean-subtract fill rather than an actual
-                  stroke) — a rainbow foil masked to all nine paths, reusing
-                  Arlan's exact repeating-linear-gradient (see
-                  .holo-tile__foil in holoEngine.css) and repositioned by
-                  --gx/--gy, the same tilt-driven glare-position vars
+                  stroke) — a repeating gradient masked to all nine paths,
+                  same repeat structure/angle as Arlan's foil (see
+                  .holo-tile__foil in holoEngine.css) but recolored to a
+                  cream-to-mustard gold palette lifted from a reference mesh
+                  gradient the user shared, instead of a rainbow. Repositioned
+                  by --gx/--gy, the same tilt-driven glare-position vars
                   applyFrame already writes onto the flip wrapper every
                   frame. Plain opaque paint, no blend mode — the logo is
                   pure black, and blend modes against pure black/white are
@@ -499,7 +501,7 @@ export function HoloCard({ card }) {
                 className="pointer-events-none absolute inset-0"
                 style={{
                   backgroundImage:
-                    "repeating-linear-gradient(98deg, #ff8985 0%, #ffee70 3%, #b0ff70 6%, #8ffff8 9%, #8aa1ff 12%, #dc85ff 15%, #ff8985 18%)",
+                    "repeating-linear-gradient(98deg, #f5edc9 0%, #e6d072 4%, #ddb945 8%, #c99416 12%, #e6d072 16%, #f5edc9 20%)",
                   backgroundSize: "300% 300%",
                   backgroundPosition: "var(--gx, 50%) var(--gy, 50%)",
                   maskImage: `url("${babLogoMask}")`,
