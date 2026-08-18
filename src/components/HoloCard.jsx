@@ -22,6 +22,19 @@ import "../motion/holoEngine.css";
 const ENABLE_TILT = true;
 const ENABLE_FOIL_SHIMMER = false;
 const ENABLE_AVATAR_FLIP = false;
+// Off for now — rejected two attempts (.holo-sheen's edge-catch box-shadow
+// read as a blurred edge; .holo-glare's warm wash wasn't liked either).
+// Starting the halo/sheen effect over from scratch. Both attempts are
+// still in holoEngine.css if either is worth revisiting.
+const ENABLE_SHEEN = false;
+// Cube/block pattern (.holo-pattern/--lit), revealed in a soft band on the
+// side the card's turned toward — --reveal/--reveal-angle/--reveal-x/-y,
+// which applyFrame always computes. Gradient gold (see holoEngine.css)
+// since Arlan's white + blend-mode hearts version can't show against this
+// white card, and swapped from hearts to a simple isometric cube outline
+// to match Blockchain at Berkeley. The iridescent sheen on top of these
+// is a separate follow-up.
+const ENABLE_PATTERN = true;
 
 // Flat white print, matching the Figma card exactly (no gradient).
 const BODY_GRADIENT = "#ffffff";
@@ -241,8 +254,14 @@ export function HoloCard({ card }) {
               <div className="holo-spot" />
               <div className="holo-noise" />
               <div className="holo-glare" />
-              <div className="holo-sheen" />
             </div>
+          )}
+          {ENABLE_SHEEN && <div className="holo-glare" />}
+          {ENABLE_PATTERN && (
+            <>
+              <div className="holo-pattern" />
+              <div className="holo-pattern--lit" />
+            </>
           )}
 
           <div className="holo-content relative flex w-full flex-col items-start gap-2 px-[22px] py-8">

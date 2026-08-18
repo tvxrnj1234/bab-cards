@@ -49,18 +49,35 @@
 }
 
 /* The decoration, bought out of the tilt budget — barely there at rest,
- * coming up as the card turns. Reusing Arlan's reveal pattern for now;
- * swap the SVG motif for a club mark once the full design pass happens. */
+ * coming up as the card turns, masked to a soft band that follows the
+ * tilt direction so the pattern only surfaces on the side you turned
+ * toward. Arlan's original used a hearts motif in this slot; swapped for
+ * a simple isometric cube ("block") outline, on-brand for Blockchain at
+ * Berkeley.
+ *
+ * Recolored from Arlan's white + mix-blend-mode:multiply/screen — both
+ * are no-ops against a pure white backdrop (multiply preserves the top
+ * layer's own color unchanged on a white base; screen stays white)
+ * for the same reason .holo-sheen and .holo-glare's white/overlay
+ * versions were invisible. Both passes use a light cream-to-gold
+ * gradient stroke (#FFF6DC → #EFD9A0, near the role badge's own
+ * #DEC164) so the cubes read as the same family as the badge rather
+ * than an unrelated tone; the dark/lit split is still two masked passes
+ * covering opposite halves of the reveal band (matching the source's
+ * structure), just no longer two different hues. */
 .holo-pattern,
 .holo-pattern--lit {
+  border-radius: inherit;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
   opacity: var(--reveal, 0);
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%20%3Cpath%20d%3D%27M14%2026c-6-7.5-1-15.5%204.8-14.2%202.8.6%204.4%203%205.1%204.6%201-1.7%202.9-4%206-3.8%206.3.4%208.8%209%201.4%2015-3.3%202.7-6.4%204.6-8%206-1.7-1.5-5.5-4.6-9.3-7.6z%27%20transform%3D%27rotate%28-10%2025%2022%29%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
   background-repeat: repeat;
   background-size: 21%;
 }
 
 .holo-pattern {
-  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cdefs%3E%3ClinearGradient%20id%3D%27hg1%27%20x1%3D%270%25%27%20y1%3D%270%25%27%20x2%3D%27100%25%27%20y2%3D%27100%25%27%3E%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%23FFF6DC%27%2F%3E%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%23EFD9A0%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27url%28%23hg1%29%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20transform%3D%27rotate%28-8%2017%2021%29%27%3E%20%3Cpath%20d%3D%27M17%206%20L30%2013.5%20L30%2028.5%20L17%2036%20L4%2028.5%20L4%2013.5%20Z%27%2F%3E%20%3Cpath%20d%3D%27M17%2021%20L30%2013.5%20M17%2021%20L17%2036%20M17%2021%20L4%2013.5%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
   mask-image:
     radial-gradient(ellipse 82% 96% at var(--reveal-x, 50%) var(--reveal-y, 50%), #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 76%),
     linear-gradient(var(--reveal-angle, 90deg), #000 12%, rgba(0, 0, 0, 0.5) 46%, transparent 62%);
@@ -69,8 +86,8 @@
 }
 
 .holo-pattern--lit {
-  mix-blend-mode: screen;
   opacity: calc(var(--reveal, 0) * 0.85);
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cdefs%3E%3ClinearGradient%20id%3D%27hg1%27%20x1%3D%270%25%27%20y1%3D%270%25%27%20x2%3D%27100%25%27%20y2%3D%27100%25%27%3E%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%23FFF6DC%27%2F%3E%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%23EFD9A0%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27url%28%23hg1%29%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%20transform%3D%27rotate%28-8%2017%2021%29%27%3E%20%3Cpath%20d%3D%27M17%206%20L30%2013.5%20L30%2028.5%20L17%2036%20L4%2028.5%20L4%2013.5%20Z%27%2F%3E%20%3Cpath%20d%3D%27M17%2021%20L30%2013.5%20M17%2021%20L17%2036%20M17%2021%20L4%2013.5%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
   mask-image:
     radial-gradient(ellipse 82% 96% at var(--reveal-x, 50%) var(--reveal-y, 50%), #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 76%),
     linear-gradient(var(--reveal-angle, 90deg), transparent 38%, rgba(0, 0, 0, 0.5) 54%, #000 88%);
@@ -118,7 +135,17 @@
   opacity: calc(var(--l3-o, 0) * 0.5);
 }
 
+/* Unused for now — tried as a warm-cream radial wash (real alpha, no blend
+ * mode, since Arlan's white + mix-blend-mode:overlay is a no-op against a
+ * pure white backdrop), rejected. Reverted to the source's own values —
+ * a clean, faithful starting point for whatever the halo/sheen effect
+ * ends up being instead. Needs its own positioning since it's rendered
+ * standalone rather than nested in .holo-fx. */
 .holo-glare {
+  border-radius: inherit;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
   background-image: radial-gradient(
     farthest-corner circle at var(--gx, 50%) var(--gy, 50%),
     rgba(255, 255, 255, 0.75) 10%,
@@ -129,7 +156,18 @@
   opacity: calc(var(--glare-o, 0.55) * (0.93 + var(--breath, 0.5) * 0.07));
 }
 
+/* Unused for now — tried as the edge-catch sheen, rejected (a white
+ * highlight can't show against this white card; boosting it toward
+ * visibility read as a blurred edge, not a sheen). .holo-glare is what's
+ * mounted instead. Left wired to --edge-* and worded exactly like Arlan's
+ * source so it's a clean, faithful starting point if it's picked up again;
+ * needs its own positioning since it's rendered standalone rather than
+ * nested in .holo-fx. */
 .holo-sheen {
+  border-radius: inherit;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, calc(var(--edge-t, 0) * 0.55 + 0.1)),
     inset 0 -1px 0 rgba(255, 255, 255, calc(var(--edge-b, 0) * 0.5 + 0.06)),
