@@ -18,6 +18,7 @@ import { ArtIcon, LinkedInIcon, ReloadIcon } from "./icons";
 import { CoffeeCup } from "./CoffeeCup";
 import { Doodle } from "./Doodle";
 import babLogo from "../assets/bab-logo.svg";
+import babLogoMask from "../assets/bab-logo-mask.svg";
 import "../motion/holoEngine.css";
 
 const ENABLE_TILT = true;
@@ -472,7 +473,46 @@ export function HoloCard({ card }) {
               pointerEvents: "auto",
             }}
           >
-            <img src={babLogo} alt="Blockchain at Berkeley" className="w-[45%]" draggable={false} />
+            <div className="relative w-[45%] aspect-[218.605/211.496]">
+              <img src={babLogo} alt="Blockchain at Berkeley" className="block h-full w-full" draggable={false} />
+              {/* Iridescent sheen recoloring the whole logo — every path,
+                  both the six stroked flap outlines and the three "Subtract"
+                  fill shapes (the hollow-looking triangle/arrow bodies,
+                  built via a boolean-subtract fill rather than an actual
+                  stroke) — a rainbow foil masked to all nine paths, reusing
+                  Arlan's exact repeating-linear-gradient (see
+                  .holo-tile__foil in holoEngine.css) and repositioned by
+                  --gx/--gy, the same tilt-driven glare-position vars
+                  applyFrame already writes onto the flip wrapper every
+                  frame. Plain opaque paint, no blend mode — the logo is
+                  pure black, and blend modes against pure black/white are
+                  no-ops (see the .holo-glare/.holo-sheen/.holo-pattern
+                  history above), so the gradient just fully replaces the
+                  black within the mask.
+                  The mask's url() must be double-quoted: Vite inlines this
+                  small SVG as a data: URI whose SVG attributes use single
+                  quotes, and an unquoted CSS url() token forbids raw quote
+                  characters — unquoted, the browser silently drops the
+                  whole mask-image declaration. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(98deg, #ff8985 0%, #ffee70 3%, #b0ff70 6%, #8ffff8 9%, #8aa1ff 12%, #dc85ff 15%, #ff8985 18%)",
+                  backgroundSize: "300% 300%",
+                  backgroundPosition: "var(--gx, 50%) var(--gy, 50%)",
+                  maskImage: `url("${babLogoMask}")`,
+                  maskSize: "100% 100%",
+                  maskRepeat: "no-repeat",
+                  maskPosition: "center",
+                  WebkitMaskImage: `url("${babLogoMask}")`,
+                  WebkitMaskSize: "100% 100%",
+                  WebkitMaskRepeat: "no-repeat",
+                  WebkitMaskPosition: "center",
+                }}
+              />
+            </div>
           </div>
         </motion.div>
       </div>
