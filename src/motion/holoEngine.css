@@ -59,8 +59,8 @@
  * are no-ops against a pure white backdrop (multiply preserves the top
  * layer's own color unchanged on a white base; screen stays white)
  * for the same reason .holo-sheen and .holo-glare's white/overlay
- * versions were invisible. Both passes use a solid gold stroke
- * (#E6C583, near the role badge's own #DEC164) so the cubes read as
+ * versions were invisible. Both passes use a solid light gold stroke
+ * (#F0DDA0, near the role badge's own #DEC164) so the cubes read as
  * the same family as the badge rather than an unrelated tone; the
  * dark/lit split is still two masked passes
  * covering opposite halves of the reveal band (matching the source's
@@ -74,10 +74,11 @@
   opacity: var(--reveal, 0);
   background-repeat: repeat;
   background-size: 21%;
+  background-position: 0 -20px;
 }
 
 .holo-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23E6C583%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%20%3Cpath%20d%3D%27M17%206%20L30%2013.5%20L30%2028.5%20L17%2036%20L4%2028.5%20L4%2013.5%20Z%27%2F%3E%20%3Cpath%20d%3D%27M17%2021%20L30%2013.5%20M17%2021%20L17%2036%20M17%2021%20L4%2013.5%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23F0DDA0%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%20%3Cpath%20d%3D%27M17%206%20L30%2013.5%20L30%2028.5%20L17%2036%20L4%2028.5%20L4%2013.5%20Z%27%2F%3E%20%3Cpath%20d%3D%27M17%2021%20L30%2013.5%20M17%2021%20L17%2036%20M17%2021%20L4%2013.5%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
   mask-image:
     radial-gradient(ellipse 82% 96% at var(--reveal-x, 50%) var(--reveal-y, 50%), #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 76%),
     linear-gradient(var(--reveal-angle, 90deg), #000 12%, rgba(0, 0, 0, 0.5) 46%, transparent 62%);
@@ -87,7 +88,7 @@
 
 .holo-pattern--lit {
   opacity: calc(var(--reveal, 0) * 0.85);
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23E6C583%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%20%3Cpath%20d%3D%27M17%206%20L30%2013.5%20L30%2028.5%20L17%2036%20L4%2028.5%20L4%2013.5%20Z%27%2F%3E%20%3Cpath%20d%3D%27M17%2021%20L30%2013.5%20M17%2021%20L17%2036%20M17%2021%20L4%2013.5%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%20%3Cg%20fill%3D%27none%27%20stroke%3D%27%23F0DDA0%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%20%3Cpath%20d%3D%27M17%206%20L30%2013.5%20L30%2028.5%20L17%2036%20L4%2028.5%20L4%2013.5%20Z%27%2F%3E%20%3Cpath%20d%3D%27M17%2021%20L30%2013.5%20M17%2021%20L17%2036%20M17%2021%20L4%2013.5%27%2F%3E%20%3C%2Fg%3E%3C%2Fsvg%3E");
   mask-image:
     radial-gradient(ellipse 82% 96% at var(--reveal-x, 50%) var(--reveal-y, 50%), #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 76%),
     linear-gradient(var(--reveal-angle, 90deg), transparent 38%, rgba(0, 0, 0, 0.5) 54%, #000 88%);
