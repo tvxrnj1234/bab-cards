@@ -33,6 +33,7 @@ export function CoffeeCup({ className }) {
       <path
         d="M9.05 0H10.95C10.95 3 10.5 5.5 10.5 8C10.5 10.5 10.65 13 10.65 15.5C10.65 16.4 10.3 17 10 17C9.7 17 9.35 16.4 9.35 15.5C9.35 13 9.5 10.5 9.5 8C9.5 5.5 9.05 3 9.05 0Z"
         fill="#6F4E37"
+        style={{ transformBox: "fill-box" }}
         className="origin-top scale-y-0 opacity-0 transition-all duration-[350ms] delay-0 ease-out group-hover:scale-y-100 group-hover:opacity-100 group-hover:delay-150 motion-reduce:transition-none"
       />
 
@@ -52,7 +53,7 @@ export function CoffeeCup({ className }) {
           open/close motion, relative to the path's own local coords. */}
       <g transform="translate(4.218, 11.81)">
         <g
-          style={{ transformOrigin: "0% 100%" }}
+          style={{ transformBox: "fill-box", transformOrigin: "0% 100%" }}
           className="transition-transform duration-[250ms] ease-out group-hover:-translate-x-[1.5px] group-hover:-translate-y-[1.2px] group-hover:-rotate-[32deg] motion-reduce:transition-none"
         >
           <path
