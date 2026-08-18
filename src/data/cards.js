@@ -13,7 +13,7 @@ export const CARDS = [
     // Role badge: icon key (see icons.jsx) + the badge's fill color.
     roleIcon: "art",
     badgeColor: "#DEC164",
-    issuedOn: "June 05 2026",
+    issuedOn: "Feb 10 2025",
     // Decorative doodle, not interactive — see the "Doodle field" decision.
     // A filled illustration (not a stroked line), exact path from Figma.
     doodleViewBox: "0 0 36 33",
